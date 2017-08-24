@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="#">
+    <label>用户名: <input type="text" id="username" name="username" /></label>
+    <label>密码: <input type="password" id="password" name="password" /></label>
+    <button class="submit">提交</button>
+    <!--<input type="submit" value="提交">-->
+</form>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+<script>
+    var username = document.querySelector('#username').value;
+    var password = document.querySelector('#password').value;
+    var btn = document.querySelector('.submit');
+
+    fetch('/createuser', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            username: '123',
+            password: '123'
+        })
+    }).then(function(res){
+        console.log(res);
+        if(res.ok){
+            console.log('ok');
+        } else if(res.status == 401){
+            console.log('Oops! You are not authorized.')
+        }
+    }, function (e) {
+        console.log('Error submitting form!')
+    })
+
+
+</script>
+</body>
+</html>
