@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-<form action="#">
+<form id="myForm" name="myForm">
     <label>用户名: <input type="text" id="username" name="username" /></label>
     <label>密码: <input type="password" id="password" name="password" /></label>
     <button class="submit">提交</button>
@@ -13,31 +13,36 @@
 </form>
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
 <script>
-    var username = document.querySelector('#username').value;
-    var password = document.querySelector('#password').value;
-    var btn = document.querySelector('.submit');
+    $(function(){
+        var username = document.querySelector('#username').value;
+        var password = document.querySelector('#password').value;
+        var btn = document.querySelector('.submit');
+        var myForm = document.querySelector('#myForm');
 
-    fetch('/createuser', {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            username: '123',
-            password: '123'
-        })
-    }).then(function(res){
-        console.log(res);
-        if(res.ok){
-            console.log('ok');
-        } else if(res.status == 401){
-            console.log('Oops! You are not authorized.')
+        var formData = new FormData(myForm);
+
+        formData.append('username',username);
+        formData.append('password',password);
+
+        btn.onclick = function(){
+            fetch('http://10.1.27.215:8088/profile', {
+                method: "POST",
+                headers: {
+                    "Content-Type": undefined,
+                },
+                body: formData
+            }).then(function(res){
+                if(res.ok){
+                    console.log('ok');
+                } else if(res.status == 401){
+                    console.log('Oops! You are not authorized.')
+                }
+            }, function (e) {
+                console.log('Error submitting form!')
+            })
+            return false;
         }
-    }, function (e) {
-        console.log('Error submitting form!')
     })
-
-
 </script>
 </body>
 </html>
