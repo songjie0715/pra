@@ -8,28 +8,32 @@
 <form id="myForm" name="myForm">
     <label>用户名: <input type="text" id="username" name="username" /></label>
     <label>密码: <input type="password" id="password" name="password" /></label>
+    <form id="upload" name="upload">
+        <label>头像：<input type="file" id="file" name="logo"></label>
+        <button class="uploadPic">上传</button>
+    </form>
     <button class="submit">提交</button>
     <!--<input type="submit" value="提交">-->
 </form>
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
 <script>
     $(function(){
-        var username = document.querySelector('#username').value;
-        var password = document.querySelector('#password').value;
         var btn = document.querySelector('.submit');
-        var myForm = document.querySelector('#myForm');
-
-        var formData = new FormData(myForm);
-
-        formData.append('username',username);
-        formData.append('password',password);
-
+        var upload = document.querySelector('.uploadPic');
         btn.onclick = function(){
-            fetch('http://10.1.27.215:8088/profile', {
+            var username = document.querySelector('#username').value;
+            var password = document.querySelector('#password').value;
+
+            var myForm = document.querySelector('#myForm');
+
+            var formData = new FormData();
+
+            formData.append('username',username);
+            formData.append('password',password);
+            formData.append('file',file);
+
+            fetch('/createuser', {
                 method: "POST",
-                headers: {
-                    "Content-Type": undefined,
-                },
                 body: formData
             }).then(function(res){
                 if(res.ok){
@@ -39,9 +43,32 @@
                 }
             }, function (e) {
                 console.log('Error submitting form!')
-            })
+            });
             return false;
+        };
+
+        upload.onclick = function(){
+            var file = document.querySelector('#file').value;
+
+            var formData = new FormData();
+            formData.append('file', file);
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            }).then(function(res){
+                if( res.ok ){
+                    console.log('上传成功');
+                }else {
+                    console.log('你还未登录');
+                }
+            },function(){
+                console.log('上传失败');
+            });
+            return false;
+
         }
+
     })
 </script>
 </body>

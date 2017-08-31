@@ -1,22 +1,24 @@
+var fs = require('fs');
 var express = require('express');
 var router = express.Router();
 let multer = require('multer');
-let querystring = require('querystring');
+var upload = multer({dest: 'upload/'});
+var app = express();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-router.post('/createuser', function (req, res, next) {
-  var data = ''
-    console.log(req);
-  req.on('data', function(chunk){
-      data += chunk;
-      const postData = querystring.parse(data);
-      console.log(postData);
-  })
+router.post('/createuser', upload.array('myForm'), function (req, res, next) {
+  console.log(req.body)
   res.send({});
+});
+
+router.post('/upload', upload.single('logo'), function(req, res, next){
+  console.log(req.file);
+  console.log('hahahah')
+  res.send({ret_code: '0'})
 });
 
 module.exports = router;
