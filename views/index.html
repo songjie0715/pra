@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>title</title>
 </head>
 <body>
 <form id="myForm" name="myForm">
@@ -24,13 +24,10 @@
             var username = document.querySelector('#username').value;
             var password = document.querySelector('#password').value;
 
-            var myForm = document.querySelector('#myForm');
-
             var formData = new FormData();
 
             formData.append('username',username);
             formData.append('password',password);
-            formData.append('file',file);
 
             fetch('/createuser', {
                 method: "POST",
@@ -48,10 +45,10 @@
         };
 
         upload.onclick = function(){
-            var file = document.querySelector('#file').value;
-
+            var file = document.querySelector('#file');
+            console.log(file.files[0]);
             var formData = new FormData();
-            formData.append('file', file);
+            formData.append('logo', file.files[0]);
 
             fetch('/upload', {
                 method: 'POST',
@@ -66,7 +63,6 @@
                 console.log('上传失败');
             });
             return false;
-
         }
 
     })
